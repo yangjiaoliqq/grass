@@ -1,5 +1,5 @@
 <template>
-  <div class="user-box">
+  <div class="user-box" v-cloak>
     <!-- 导航栏 -->
     <van-nav-bar class="user-navbar" title="草根金融" fixed />
     <div class="container">
@@ -90,11 +90,16 @@ export default {
 </script>
 
 <style lang="less">
+
 html,
 body {
   background-color: #f1f1f1;
+  
 }
 .user-box {
+   [v-cloak] {
+    display: none!important;
+  }
   //导航栏
   .user-navbar {
     background-color: rgb(50, 151, 253);
@@ -108,6 +113,7 @@ body {
     width: 100%;
     height: 100%;
     margin-top: 46px;
+   
     .info-main {
       width: 100%;
       background-color: #fff;

@@ -7,7 +7,8 @@ import './style/base.css'
 import './style/iconfont.css'
 import 'vant/lib/index.css';
 import 'amfe-flexible/index.js'
-
+// 导入过滤器
+import './filter/telfilter'
 
 Vue.use(Vant);
 

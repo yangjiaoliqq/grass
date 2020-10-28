@@ -5,15 +5,15 @@
     <div class="container">
       <!-- 轮播图 -->
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-        <van-swipe-item
-          ><img src="../../assets/loanBanner1.52bb9bb.jpg" alt=""
+        <van-swipe-item v-for="(item,index) in bannerList" :key="index"
+          ><img :src="item" alt=""
         /></van-swipe-item>
-        <van-swipe-item
+        <!-- <van-swipe-item
           ><img src="../../assets/loanBanner2.2bd63e8.jpg" alt=""
         /></van-swipe-item>
         <van-swipe-item
           ><img src="../../assets/loanBanner3.ad43349.jpg" alt=""
-        /></van-swipe-item>
+        /></van-swipe-item> -->
       </van-swipe>
       <!-- 列表 -->
       <div class="loans">
@@ -47,7 +47,7 @@ export default {
   methods: {
     async getHomeList() {
       let res = await apihomeList();
-      console.log(res);
+      // console.log(res);
       this.bannerList = res.data.banner_list;
       this.List = res.data.item_list;
     },

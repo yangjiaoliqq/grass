@@ -5,35 +5,38 @@
     <div class="container">
       <div class="info-main">
         <div class="info-hp">
-          <img class="header-img" src="../../assets/010.jpg" alt="头像" />
+          <img class="header-img" :src="userInfo.avatar" alt="头像" />
           <div class="info">
-            <span class="name">您好</span>
-            <span class="tel">159****0330</span>
-            <p class="iden">
-              <span class="xue"
-                ><i class="iconfont icon-renzheng"></i>学徒</span
+            <span class="name">{{ userInfo.username }}</span>
+            <span class="tel">{{ userInfo.phone | telfilter }}</span>
+            <div class="iden">
+              <p
+                class="badge"
+                v-for="(item, index) in userInfo.badge_list"
+                :key="index"
               >
-              <span class="up"
-                ><i class="iconfont icon-huangguan"></i>白手起家</span
-              >
-            </p>
+                <img class="badge-icon" :src="item.icon" alt="" />
+                <span class="badge_name">{{ item.name }}</span>
+              </p>
+            </div>
           </div>
         </div>
         <div class="info-bp">
           <p class="apply-for">
             <span>申请借款</span>
-            <span class="num">1 笔</span>
+            <span class="num">{{ borrowList.apply_num }} 笔</span>
           </p>
           <p class="to-be">
             <span>待还借款</span>
-            <span class="num">0 笔</span>
+            <span class="num">{{ borrowList.return_num }} 笔</span>
           </p>
         </div>
       </div>
       <van-cell is-link v-for="(item, index) in loanList" :key="index">
         <template #title>
-          <i class="iconfont" :class="item.icon"></i>
-          <span class="custom-title">{{ item.title }}</span>
+          <!-- <i class="iconfont" :class="item.icon"></i> -->
+          <img class="icon" :src="item.icon" alt="" />
+          <span class="custom-title">{{ item.name }}</span>
         </template>
       </van-cell>
       <van-button type="default" size="large" @click="loginOut"
@@ -44,38 +47,28 @@
 </template>
 
 <script>
+import { apiGetInfo } from "../../api/user";
 export default {
   data() {
     return {
-      loanList: [
-        {
-          title: "我的借款",
-          icon: "icon-jiekuan",
-        },
-        {
-          title: "我的还款",
-          icon: "icon-huankuan",
-        },
-        {
-          title: "我的奖励",
-          icon: "icon-jiangli",
-        },
-        {
-          title: "帮助中心",
-          icon: "icon-bangzhu",
-        },
-        {
-          title: "意见反馈",
-          icon: "icon-yijianfankui",
-        },
-        {
-          title: "关于我们",
-          icon: "icon-guanyu",
-        },
-      ],
+      uid: 1,
+      loanList: [],
+      borrowList: {},
+      userInfo: {},
     };
   },
+  created() {
+    this.getLoan();
+  },
   methods: {
+    // 获取首页列表
+    async getLoan() {
+      let res = await apiGetInfo(this.uid);
+      console.log(res);
+      this.userInfo = res.data.data.user_info;
+      this.loanList = res.data.data.menu_list;
+      this.borrowList = res.data.data.borrow_info;
+    },
     loginOut() {
       // 退出登录
       this.$dialog
@@ -86,7 +79,7 @@ export default {
         .then(() => {
           // on confirm
           // 确认
-          this.$router.push('/login')
+          this.$router.push("/login");
         })
         .catch(() => {
           // on cancel
@@ -153,14 +146,17 @@ body {
             margin-top: 5px;
             font-size: 12px;
             color: #999;
-            .xue {
-              margin-right: 40px;
-              .iconfont {
-                font-size: 20px;
+            display: flex;
+            justify-content: flex-start;
+            .badge {
+              width: 30%;
+              display: flex;
+              align-items: center;
+              .badge-icon {
+                width: 14px;
+                height: 14px;
+                margin-right: 5px;
               }
-            }
-            .iconfont {
-              color: rgb(50, 151, 253);
             }
           }
         }
@@ -202,17 +198,23 @@ body {
     }
     //单元格
     .van-cell {
-      .iconfont {
+      // .iconfont {
+      //   margin-right: 15px;
+      //   color: rgb(50, 151, 253);
+      //   font-size: 24px;
+      // }
+      .icon {
+        width: 20px;
+        height: 20px;
+        // border-radius: 50%;
         margin-right: 15px;
-        color: rgb(50, 151, 253);
-        font-size: 24px;
       }
-      .icon-mini {
-        font-size: 20px;
-      }
-      .icon-big {
-        font-size: 26px;
-      }
+      // .icon-mini {
+      //   font-size: 20px;
+      // }
+      // .icon-big {
+      //   font-size: 26px;
+      // }
     }
     // 按钮
     .van-button {
